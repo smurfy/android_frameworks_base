@@ -644,6 +644,9 @@ EventHub::Device* EventHub::getDeviceByPathLocked(const char* devicePath) const 
     return NULL;
 }
 
+#define SFDROID_ROOT "/tmp/sfdroid/"
+#define FOCUS_FILE (SFDROID_ROOT "/have_focus")
+
 size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSize) {
     ALOG_ASSERT(bufferSize >= 1);
 
@@ -654,6 +657,7 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
     RawEvent* event = buffer;
     size_t capacity = bufferSize;
     bool awoken = false;
+
     for (;;) {
         nsecs_t now = systemTime(SYSTEM_TIME_MONOTONIC);
 
@@ -942,6 +946,11 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
             // Some events occurred.
             mPendingEventCount = size_t(pollResult);
         }
+    }
+
+    // don't get events if sfdroid does not have focus
+    if(access(FOCUS_FILE, F_OK) < 0) {
+        return 0;
     }
 
     // All done, return the number of events we read.
