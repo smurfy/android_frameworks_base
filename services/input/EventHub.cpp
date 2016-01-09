@@ -644,8 +644,8 @@ EventHub::Device* EventHub::getDeviceByPathLocked(const char* devicePath) const 
     return NULL;
 }
 
-#define SFDROID_ROOT "/tmp/sfdroid/"
-#define FOCUS_FILE (SFDROID_ROOT "/have_focus")
+#define SFDROID_ROOT "/tmp/sfdroid"
+#define RUNNING_FILE (SFDROID_ROOT "/running")
 
 size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSize) {
     ALOG_ASSERT(bufferSize >= 1);
@@ -660,6 +660,21 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
 
     for (;;) {
         nsecs_t now = systemTime(SYSTEM_TIME_MONOTONIC);
+
+        // sfdroid
+        // If the uinput device is not yet known by EventHub there should be
+        // no other devices because android wants them to be in the input group
+        // but on sailfish they are in video. We use a udev rule to set the
+        // group of the sfdroid uinput device to input so opening it should
+        // work in EventHub.
+        if(!mNeedToScanDevices && mDevices.size() == 0)
+        {
+            if(!(access(RUNNING_FILE, F_OK) < 0)) {
+                ALOGI("sfdroid: %s found, doing input device scan.", RUNNING_FILE);
+                // sfdroid is running but we don't have the uinput device yet
+                mNeedToReopenDevices = true;
+            }
+        }
 
         // Reopen input devices if needed.
         if (mNeedToReopenDevices) {
@@ -946,11 +961,6 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
             // Some events occurred.
             mPendingEventCount = size_t(pollResult);
         }
-    }
-
-    // don't get events if sfdroid does not have focus
-    if(access(FOCUS_FILE, F_OK) < 0) {
-        return 0;
     }
 
     // All done, return the number of events we read.
