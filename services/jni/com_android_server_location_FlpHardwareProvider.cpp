@@ -643,7 +643,7 @@ static void Init(JNIEnv* env, jobject obj) {
   }
 
   const hw_module_t* module = NULL;
-  int err = hw_get_module(FUSED_LOCATION_HARDWARE_MODULE_ID, &module);
+  int err = -1;//hw_get_module(FUSED_LOCATION_HARDWARE_MODULE_ID, &module);
   if(err != 0) {
     ALOGE("Error hw_get_module '%s': %d", FUSED_LOCATION_HARDWARE_MODULE_ID, err);
     return;
