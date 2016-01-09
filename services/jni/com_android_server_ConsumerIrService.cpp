@@ -34,7 +34,7 @@ static jint halOpen(JNIEnv *env, jobject obj) {
     consumerir_device_t *dev;
     int err;
 
-    err = hw_get_module(CONSUMERIR_HARDWARE_MODULE_ID, &module);
+    err = -1;;//hw_get_module(CONSUMERIR_HARDWARE_MODULE_ID, &module);
     if (err != 0) {
         ALOGE("Can't open consumer IR HW Module, error: %d", err);
         return 0;
