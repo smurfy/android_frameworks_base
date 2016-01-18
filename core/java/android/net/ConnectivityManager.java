@@ -412,6 +412,18 @@ public class ConnectivityManager {
         }
     }
 
+    NetworkInfo fake_networkinfo = null;
+
+    public void setup_fake_networkinfo()
+    {
+        if(fake_networkinfo == null)
+        {
+            fake_networkinfo = new NetworkInfo(ConnectivityManager.TYPE_WIFI, 0, "WIFI", "");
+            fake_networkinfo.setDetailedState(NetworkInfo.DetailedState.CONNECTED, "sfdroid", "fake wifi");
+//            fake_networkinfo.mIsAvailable = true;
+        }
+    }
+
     /**
      * Returns details about the currently active data network. When connected,
      * this network is the default route for outgoing connections. You should
@@ -421,20 +433,28 @@ public class ConnectivityManager {
      * {@link android.Manifest.permission#ACCESS_NETWORK_STATE}.
      */
     public NetworkInfo getActiveNetworkInfo() {
+        setup_fake_networkinfo();
+        return fake_networkinfo;
+/*
         try {
             return mService.getActiveNetworkInfo();
         } catch (RemoteException e) {
             return null;
         }
+*/
     }
 
     /** {@hide} */
     public NetworkInfo getActiveNetworkInfoForUid(int uid) {
+        setup_fake_networkinfo();
+        return fake_networkinfo;
+/*
         try {
             return mService.getActiveNetworkInfoForUid(uid);
         } catch (RemoteException e) {
             return null;
         }
+*/
     }
 
     public NetworkInfo getNetworkInfo(int networkType) {
@@ -446,11 +466,16 @@ public class ConnectivityManager {
     }
 
     public NetworkInfo[] getAllNetworkInfo() {
+        NetworkInfo[] networkinfos = new NetworkInfo[1];
+        networkinfos[0] = fake_networkinfo;
+        return networkinfos;
+/*
         try {
             return mService.getAllNetworkInfo();
         } catch (RemoteException e) {
             return null;
         }
+*/
     }
 
     /** {@hide} */
@@ -914,11 +939,14 @@ public class ConnectivityManager {
      * available.
      */
     public boolean isActiveNetworkMetered() {
+        return false;
+/*
         try {
             return mService.isActiveNetworkMetered();
         } catch (RemoteException e) {
             return false;
         }
+*/
     }
 
     /** {@hide} */
