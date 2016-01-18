@@ -55,7 +55,7 @@ final class DisplayPowerState {
     private final Handler mHandler;
     private final Choreographer mChoreographer;
     private final ElectronBeam mElectronBeam;
-    private final DisplayBlanker mDisplayBlanker;
+    //private final DisplayBlanker mDisplayBlanker;
     private final LightsService.Light mBacklight;
     private final PhotonicModulator mPhotonicModulator;
 
@@ -76,7 +76,7 @@ final class DisplayPowerState {
         mHandler = new Handler(true /*async*/);
         mChoreographer = Choreographer.getInstance();
         mElectronBeam = electronBean;
-        mDisplayBlanker = displayBlanker;
+        //mDisplayBlanker = displayBlanker;
         mBacklight = backlight;
         mPhotonicModulator = new PhotonicModulator();
 
@@ -395,14 +395,15 @@ final class DisplayPowerState {
                         Slog.d(TAG, "Updating screen state: on=" + on
                                 + ", backlight=" + backlight);
                     }
+                    // sfdroid
                     if (onChanged && on) {
-                        mDisplayBlanker.unblankAllDisplays();
+                        //mDisplayBlanker.unblankAllDisplays();
                     }
                     if (backlightChanged) {
-                        mBacklight.setBrightness(backlight);
+                        //mBacklight.setBrightness(backlight);
                     }
                     if (onChanged && !on) {
-                        mDisplayBlanker.blankAllDisplays();
+                        //mDisplayBlanker.blankAllDisplays();
                     }
                 }
 
