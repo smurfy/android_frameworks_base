@@ -359,9 +359,10 @@ class ServerThread extends Thread {
             } else if (factoryTest == SystemServer.FACTORY_TEST_LOW_LEVEL) {
                 Slog.i(TAG, "No Bluetooth Service (factory test)");
             } else {
-                Slog.i(TAG, "Bluetooth Manager Service");
-                bluetooth = new BluetoothManagerService(context);
-                ServiceManager.addService(BluetoothAdapter.BLUETOOTH_MANAGER_SERVICE, bluetooth);
+                //Slog.i(TAG, "Bluetooth Manager Service");
+                Slog.i(TAG, "No Bluetooth Service (sfdroid)");
+                //bluetooth = new BluetoothManagerService(context);
+                //ServiceManager.addService(BluetoothAdapter.BLUETOOTH_MANAGER_SERVICE, bluetooth);
             }
 
         } catch (RuntimeException e) {
