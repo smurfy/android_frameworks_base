@@ -229,37 +229,37 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_SETTINGS)) {
                 qs = new PreferencesTile(mContext, this);
             } else if (tile.equals(TILE_WIFI)) {
-                qs = new WiFiTile(mContext, this, networkController);
+//                qs = new WiFiTile(mContext, this, networkController);
             } else if (tile.equals(TILE_GPS)) {
-                qs = new GPSTile(mContext, this, mStatusBarService.mLocationController);
+//                qs = new GPSTile(mContext, this, mStatusBarService.mLocationController);
             } else if (tile.equals(TILE_BLUETOOTH) && bluetoothSupported) {
-                qs = new BluetoothTile(mContext, this, mStatusBarService.mBluetoothController);
+//                qs = new BluetoothTile(mContext, this, mStatusBarService.mBluetoothController);
             } else if (tile.equals(TILE_BRIGHTNESS)) {
-                qs = new BrightnessTile(mContext, this);
+//                qs = new BrightnessTile(mContext, this);
             } else if (tile.equals(TILE_CAMERA) && cameraSupported) {
                 qs = new CameraTile(mContext, this, mHandler);
             } else if (tile.equals(TILE_RINGER)) {
-                qs = new RingerModeTile(mContext, this);
+//                qs = new RingerModeTile(mContext, this);
             } else if (tile.equals(TILE_SYNC)) {
                 qs = new SyncTile(mContext, this, mHandler);
             } else if (tile.equals(TILE_WIFIAP) && mobileDataSupported) {
-                qs = new WifiAPTile(mContext, this);
+//                qs = new WifiAPTile(mContext, this);
             } else if (tile.equals(TILE_SCREENTIMEOUT)) {
                 qs = new ScreenTimeoutTile(mContext, this);
             } else if (tile.equals(TILE_MOBILEDATA) && mobileDataSupported) {
-                qs = new MobileNetworkTile(mContext, this, networkController);
+//                qs = new MobileNetworkTile(mContext, this, networkController);
             } else if (tile.equals(TILE_LOCKSCREEN)) {
                 qs = new ToggleLockscreenTile(mContext, this);
             } else if (tile.equals(TILE_NETWORKMODE) && mobileDataSupported) {
-                qs = new MobileNetworkTypeTile(mContext, this, networkController);
+//                qs = new MobileNetworkTypeTile(mContext, this, networkController);
             } else if (tile.equals(TILE_AUTOROTATE)) {
                 qs = new AutoRotateTile(mContext, this);
             } else if (tile.equals(TILE_AIRPLANE)) {
-                qs = new AirplaneModeTile(mContext, this, networkController);
+//                qs = new AirplaneModeTile(mContext, this, networkController);
             } else if (tile.equals(TILE_TORCH)) {
                 qs = new TorchTile(mContext, this);
             } else if (tile.equals(TILE_SLEEP)) {
-                qs = new SleepScreenTile(mContext, this);
+//                qs = new SleepScreenTile(mContext, this);
             } else if (tile.equals(TILE_PROFILE)) {
                 mTileStatusUris.add(Settings.System.getUriFor(
                         Settings.System.SYSTEM_PROFILES_ENABLED));
@@ -273,11 +273,11 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_NFC)) {
                 // User cannot add the NFC tile if the device does not support it
                 // No need to check again here
-                qs = new NfcTile(mContext, this);
+//                qs = new NfcTile(mContext, this);
             } else if (tile.equals(TILE_WIMAX)) {
                 // Not available yet
             } else if (tile.equals(TILE_LTE)) {
-                qs = new LteTile(mContext, this);
+//                qs = new LteTile(mContext, this);
             } else if (tile.equals(TILE_QUIETHOURS)) {
                 qs = new QuietHoursTile(mContext, this);
             } else if (tile.equals(TILE_VOLUME)) {
@@ -287,12 +287,12 @@ public class QuickSettingsController {
                             Settings.System.EXPANDED_DESKTOP_STYLE));
                 if (QSUtils.expandedDesktopEnabled(resolver)) {
                     qs = new ExpandedDesktopTile(mContext, this);
-                }
+                }/*
             } else if (tile.equals(TILE_NETWORKADB)) {
                 mTileStatusUris.add(Settings.Global.getUriFor(Settings.Global.ADB_ENABLED));
                 if (QSUtils.adbEnabled(resolver)) {
                     qs = new NetworkAdbTile(mContext, this);
-                }
+                }*/
             } else if (tile.equals(TILE_COMPASS)) {
                 qs = new CompassTile(mContext, this);
             } else if (tile.equals(TILE_HEADS_UP)) {
