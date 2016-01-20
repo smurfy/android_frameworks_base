@@ -955,6 +955,8 @@ public class TelephonyManager {
      * @see #SIM_STATE_CARD_IO_ERROR
      */
     public int getSimState() {
+        return SIM_STATE_ABSENT;
+/*
         String prop = getTelephonyProperty(TelephonyProperties.PROPERTY_SIM_STATE,
                 getDefaultSubscription(), "");
         if ("ABSENT".equals(prop)) {
@@ -978,6 +980,7 @@ public class TelephonyManager {
         else {
             return SIM_STATE_UNKNOWN;
         }
+*/
     }
 
     /**
