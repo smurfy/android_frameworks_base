@@ -764,6 +764,8 @@ public class TelephonyManager {
      * @see #SIM_STATE_READY
      */
     public int getSimState() {
+        return SIM_STATE_ABSENT;
+/*
         String prop = SystemProperties.get(TelephonyProperties.PROPERTY_SIM_STATE);
         if ("ABSENT".equals(prop)) {
             return SIM_STATE_ABSENT;
@@ -783,6 +785,7 @@ public class TelephonyManager {
         else {
             return SIM_STATE_UNKNOWN;
         }
+*/
     }
 
     /**
