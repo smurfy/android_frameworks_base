@@ -1626,6 +1626,8 @@ public class TelephonyManager {
      */
     /** {@hide} */
     public int getSimState(int slotIdx) {
+        return SIM_STATE_ABSENT;
+	/*
         int[] subId = SubscriptionManager.getSubId(slotIdx);
         if (subId == null || subId.length == 0) {
             Rlog.d(TAG, "getSimState:- empty subId return SIM_STATE_ABSENT");
@@ -1634,6 +1636,7 @@ public class TelephonyManager {
         int simState = SubscriptionManager.getSimStateForSubscriber(subId[0]);
         Rlog.d(TAG, "getSimState: simState=" + simState + " slotIdx=" + slotIdx);
         return simState;
+	*/
     }
 
     /**
