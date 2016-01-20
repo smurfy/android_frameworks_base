@@ -1003,17 +1003,22 @@ public class WifiManager {
      * @return {@code true} if the operation succeeded, i.e., the scan was initiated
      */
     public boolean startScan() {
+        return false;
+/*
         try {
             mService.startScan(null, null);
             return true;
         } catch (RemoteException e) {
             return false;
         }
+*/
     }
 
     /** @hide */
     @SystemApi
     public boolean startScan(WorkSource workSource) {
+        return false;
+/*
         try {
             mService.startScan(null, workSource);
             return true;
@@ -1071,6 +1076,7 @@ public class WifiManager {
         } catch (RemoteException e) {
             return false;
         }
+*/
     }
 
     /**
@@ -1085,15 +1091,21 @@ public class WifiManager {
      * @hide
      */
     public boolean requestBatchedScan(BatchedScanSettings requested) {
+        return false;
+        /*
         try {
             return mService.requestBatchedScan(requested, new Binder(), null);
         } catch (RemoteException e) { return false; }
+        */
     }
     /** @hide */
     public boolean requestBatchedScan(BatchedScanSettings requested, WorkSource workSource) {
+        return false;
+/*
         try {
             return mService.requestBatchedScan(requested, new Binder(), workSource);
         } catch (RemoteException e) { return false; }
+*/
     }
 
     /**
@@ -1104,9 +1116,12 @@ public class WifiManager {
      */
     @SystemApi
     public boolean isBatchedScanSupported() {
+        return false;
+/*
         try {
             return mService.isBatchedScanSupported();
         } catch (RemoteException e) { return false; }
+*/
     }
 
     /**
@@ -1131,11 +1146,14 @@ public class WifiManager {
      */
     @SystemApi
     public List<BatchedScanResult> getBatchedScanResults() {
+        return null;
+/*
         try {
             return mService.getBatchedScanResults(mContext.getOpPackageName());
         } catch (RemoteException e) {
             return null;
         }
+*/
     }
 
     // FakeWifiConnection
@@ -1295,11 +1313,14 @@ public class WifiManager {
      * @return the list of access points found in the most recent scan.
      */
     public List<ScanResult> getScanResults() {
+        return null;
+/*
         try {
             return mService.getScanResults(mContext.getOpPackageName());
         } catch (RemoteException e) {
             return null;
         }
+*/
     }
 
     /**
