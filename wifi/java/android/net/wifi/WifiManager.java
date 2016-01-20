@@ -738,12 +738,15 @@ public class WifiManager {
      * @return {@code true} if the operation succeeded, i.e., the scan was initiated
      */
     public boolean startScan() {
+        return false;
+/*
         try {
             mService.startScan(false);
             return true;
         } catch (RemoteException e) {
             return false;
         }
+*/
     }
 
     /**
@@ -757,12 +760,15 @@ public class WifiManager {
      * @hide
      */
     public boolean startScanActive() {
+        return false;
+/*
         try {
             mService.startScan(true);
             return true;
         } catch (RemoteException e) {
             return false;
         }
+*/
     }
 
     // FakeWifiConnection
@@ -881,11 +887,14 @@ public class WifiManager {
      * @return the list of access points found in the most recent scan.
      */
     public List<ScanResult> getScanResults() {
+        return null;
+/*
         try {
             return mService.getScanResults();
         } catch (RemoteException e) {
             return null;
         }
+*/
     }
 
     /**
