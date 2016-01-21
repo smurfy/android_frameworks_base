@@ -657,12 +657,12 @@ public class PhoneStatusBar extends BaseStatusBar {
         mNetworkController = new NetworkController(mContext);
         mBluetoothController = new BluetoothController(mContext);
 
-        mSignalView = (SignalClusterView) mStatusBarView.findViewById(R.id.signal_cluster);
+        mSignalView = null; // (SignalClusterView) mStatusBarView.findViewById(R.id.signal_cluster);
         mSignalTextView = (SignalClusterTextView) mStatusBarView.findViewById(R.id.signal_cluster_text);
         mClock = (Clock) mStatusBarView.findViewById(R.id.clock);
 
-        mNetworkController.addSignalCluster(mSignalView);
-        mSignalView.setNetworkController(mNetworkController);
+        //mNetworkController.addSignalCluster(mSignalView);
+        //mSignalView.setNetworkController(mNetworkController);
 
         mEmergencyCallLabel = (TextView)mStatusBarWindow.findViewById(R.id.emergency_calls_only);
         if (mEmergencyCallLabel != null) {
