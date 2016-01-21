@@ -1063,6 +1063,10 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             }
             mContentDescriptionWifi = mContext.getString(R.string.accessibility_no_wifi);
         }
+
+        // sfdroid don't show wifi icon
+        mWifiIconId = 0;
+        mQSWifiIconId = 0;
     }
 
     private String huntForSsid(WifiInfo info) {
