@@ -3040,11 +3040,11 @@ public class WifiStateMachine extends StateMachine {
                             transitionTo(mDriverStoppedState);
                         } else {
                             loge("Driver start failed, retrying");
-                            mWakeLock.acquire();
-                            mWifiNative.startDriver();
-                            mWakeLock.release();
+                            //mWakeLock.acquire();
+                            //mWifiNative.startDriver();
+                            //mWakeLock.release();
 
-                            ++mTries;
+                            //++mTries;
                             /* Send ourselves a delayed message to start driver again */
                             // sfdroid
                             //sendMessageDelayed(obtainMessage(CMD_DRIVER_START_TIMED_OUT,
