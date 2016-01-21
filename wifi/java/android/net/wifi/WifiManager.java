@@ -954,7 +954,33 @@ public class WifiManager {
         } catch (Exception ex) { } // for now eat exceptions
         return null;
     }
-  
+
+    public static WifiInfo fake_wifi_info = null;
+
+    void setup_fake_wifi_info()
+    {
+        if(fake_wifi_info == null)
+        {
+            fake_wifi_info = new WifiInfo();
+
+            IPInfo ip = getIPInfo();
+            InetAddress addr = (ip != null ? ip.addr : null);
+
+            fake_wifi_info.setNetworkId(1);
+            fake_wifi_info.setSupplicantState(SupplicantState.COMPLETED);
+            // Hmm
+            fake_wifi_info.setBSSID("66:55:44:33:22:11");
+            fake_wifi_info.setMacAddress("11:22:33:44:55:66");
+
+            fake_wifi_info.setInetAddress(addr);
+            fake_wifi_info.setLinkSpeed(65);
+            //fake_wifi_info.setFrequency(5000);
+            fake_wifi_info.setRssi(200);
+
+            fake_wifi_info.setSSID(WifiSsid.createFromAsciiEncoded("sfdroid-FakeWifi"));
+        }
+    }
+
     /**
      * Force a re-reading of batched scan results.  This will attempt
      * to read more information from the chip, but will do so at the expense
@@ -986,24 +1012,8 @@ public class WifiManager {
      * @return the Wi-Fi information, contained in {@link WifiInfo}.
      */
     public WifiInfo getConnectionInfo() {
-        WifiInfo info = new WifiInfo();
-
-        IPInfo ip = getIPInfo();
-        InetAddress addr = (ip != null ? ip.addr : null);
-
-        info.setNetworkId(1);
-        info.setSupplicantState(SupplicantState.COMPLETED);
-        // Hmm
-        info.setBSSID("66:55:44:33:22:11");
-        info.setMacAddress("11:22:33:44:55:66");
-        info.setInetAddress(addr);
-        info.setLinkSpeed(65);
-        //info.setFrequency(5000);
-        info.setRssi(200);
-
-        info.setSSID(WifiSsid.createFromAsciiEncoded("sfdroid-FakeWifi"));
-
-        return info;
+        setup_fake_wifi_info();
+        return new WifiInfo(fake_wifi_info);
 /*
         try {
             return mService.getConnectionInfo();

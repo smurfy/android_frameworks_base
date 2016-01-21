@@ -553,7 +553,7 @@ public class ConnectivityManager {
         {
             fake_networkinfo = new NetworkInfo(ConnectivityManager.TYPE_WIFI, 0, "WIFI", "");
             fake_networkinfo.setDetailedState(NetworkInfo.DetailedState.CONNECTED, "sfdroid", "fake wifi");
-//            fake_networkinfo.mIsAvailable = true;
+            fake_networkinfo.setIsAvailable(true);
         }
     }
 
@@ -572,7 +572,7 @@ public class ConnectivityManager {
      */
     public NetworkInfo getActiveNetworkInfo() {
         setup_fake_networkinfo();
-        return fake_networkinfo;
+        return new NetworkInfo(fake_networkinfo);
 /*
         try {
             return mService.getActiveNetworkInfo();
@@ -597,7 +597,7 @@ public class ConnectivityManager {
      */
     public NetworkInfo getActiveNetworkInfoForUid(int uid) {
         setup_fake_networkinfo();
-        return fake_networkinfo;
+        return new NetworkInfo(fake_networkinfo);
 /*
         try {
             return mService.getActiveNetworkInfoForUid(uid);
@@ -621,6 +621,8 @@ public class ConnectivityManager {
      * {@link android.Manifest.permission#ACCESS_NETWORK_STATE}.
      */
     public NetworkInfo getNetworkInfo(int networkType) {
+        setup_fake_networkinfo();
+        if(networkType == TYPE_WIFI) return new NetworkInfo(fake_networkinfo);
         try {
             return mService.getNetworkInfo(networkType);
         } catch (RemoteException e) {
@@ -640,7 +642,7 @@ public class ConnectivityManager {
      */
     public NetworkInfo[] getAllNetworkInfo() {
         NetworkInfo[] networkinfos = new NetworkInfo[1];
-        networkinfos[0] = fake_networkinfo;
+        networkinfos[0] = new NetworkInfo(fake_networkinfo);
         return networkinfos;
 /*
         try {
