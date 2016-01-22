@@ -396,11 +396,12 @@ class ContextImpl extends Context {
                 public Object createService(ContextImpl ctx) {
                     return new DownloadManager(ctx.getContentResolver(), ctx.getPackageName());
                 }});
-
+/*
         registerService(NFC_SERVICE, new ServiceFetcher() {
                 public Object createService(ContextImpl ctx) {
                     return new NfcManager(ctx);
                 }});
+*/
 
         registerService(DROPBOX_SERVICE, new StaticServiceFetcher() {
                 public Object createStaticService() {
