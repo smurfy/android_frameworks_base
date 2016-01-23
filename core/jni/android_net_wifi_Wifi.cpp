@@ -35,8 +35,9 @@ static jint DBG = false;
 
 static int doCommand(const char *ifname, const char *cmd, char *replybuf, int replybuflen)
 {
+    return 0;
+#if 0
     size_t reply_len = replybuflen - 1;
-
     if (::wifi_command(ifname, cmd, replybuf, &reply_len) != 0)
         return -1;
     else {
@@ -47,6 +48,7 @@ static int doCommand(const char *ifname, const char *cmd, char *replybuf, int re
             replybuf[reply_len] = '\0';
         return 0;
     }
+#endif
 }
 
 static jint doIntCommand(const char *ifname, const char* fmt, ...)
@@ -104,43 +106,64 @@ static jstring doStringCommand(JNIEnv* env, const char *ifname, const char* fmt,
 
 static jboolean android_net_wifi_isDriverLoaded(JNIEnv* env, jobject)
 {
+    return true;
+#if 0
     return (jboolean)(::is_wifi_driver_loaded() == 1);
+#endif
 }
 
 static jboolean android_net_wifi_loadDriver(JNIEnv* env, jobject)
 {
+    return true;
+#if 0
     return (jboolean)(::wifi_load_driver() == 0);
+#endif
 }
 
 static jboolean android_net_wifi_unloadDriver(JNIEnv* env, jobject)
 {
+    return true;
+#if 0
     return (jboolean)(::wifi_unload_driver() == 0);
+#endif
 }
 
 static jboolean android_net_wifi_startSupplicant(JNIEnv* env, jobject, jboolean p2pSupported)
 {
+    return true;
+#if 0
     return (jboolean)(::wifi_start_supplicant(p2pSupported) == 0);
+#endif
 }
 
 static jboolean android_net_wifi_killSupplicant(JNIEnv* env, jobject, jboolean p2pSupported)
 {
+    return true;
+#if 0
     return (jboolean)(::wifi_stop_supplicant(p2pSupported) == 0);
+#endif
 }
 
 static jboolean android_net_wifi_connectToSupplicant(JNIEnv* env, jobject, jstring jIface)
 {
+    return true;
+#if 0
     ScopedUtfChars ifname(env, jIface);
     return (jboolean)(::wifi_connect_to_supplicant(ifname.c_str()) == 0);
+#endif
 }
 
 static void android_net_wifi_closeSupplicantConnection(JNIEnv* env, jobject, jstring jIface)
 {
+#if 0
     ScopedUtfChars ifname(env, jIface);
     ::wifi_close_supplicant_connection(ifname.c_str());
+#endif
 }
 
 static jstring android_net_wifi_waitForEvent(JNIEnv* env, jobject, jstring jIface)
 {
+    // hmm
     char buf[EVENT_BUF_SIZE];
     ScopedUtfChars ifname(env, jIface);
     int nread = ::wifi_wait_for_event(ifname.c_str(), buf, sizeof buf);
@@ -149,6 +172,7 @@ static jstring android_net_wifi_waitForEvent(JNIEnv* env, jobject, jstring jIfac
     } else {
         return NULL;
     }
+    return NULL;
 }
 
 static jboolean android_net_wifi_doBooleanCommand(JNIEnv* env, jobject, jstring jIface,
@@ -192,7 +216,10 @@ static jstring android_net_wifi_doStringCommand(JNIEnv* env, jobject, jstring jI
 
 static jboolean android_net_wifi_setMode(JNIEnv* env, jobject, jint type)
 {
+    return true;
+#if 0
     return (jboolean)(::wifi_set_mode(type) == 0);
+#endif
 }
 
 // ----------------------------------------------------------------------------

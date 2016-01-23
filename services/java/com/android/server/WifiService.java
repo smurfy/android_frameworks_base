@@ -365,7 +365,7 @@ public class WifiService extends IWifiManager.Stub {
      * Protected by mWifiStateTracker lock.
      */
     private final WorkSource mTmpWorkSource = new WorkSource();
-    private WifiWatchdogStateMachine mWifiWatchdogStateMachine;
+    //private WifiWatchdogStateMachine mWifiWatchdogStateMachine;
 
     WifiService(Context context) {
         mContext = context;
@@ -495,10 +495,10 @@ public class WifiService extends IWifiManager.Stub {
 
         // If we are already disabled (could be due to airplane mode), avoid changing persist
         // state here
-        if (wifiEnabled) setWifiEnabled(wifiEnabled);
-
-        mWifiWatchdogStateMachine = WifiWatchdogStateMachine.
-               makeWifiWatchdogStateMachine(mContext);
+        //if (wifiEnabled) setWifiEnabled(wifiEnabled);
+        setWifiEnabled(true);
+//        mWifiWatchdogStateMachine = WifiWatchdogStateMachine.
+//               makeWifiWatchdogStateMachine(mContext);
 
     }
 
@@ -1296,9 +1296,9 @@ public class WifiService extends IWifiManager.Stub {
         pw.println("Locks held:");
         mLocks.dump(pw);
 
-        pw.println();
-        pw.println("WifiWatchdogStateMachine dump");
-        mWifiWatchdogStateMachine.dump(pw);
+        //pw.println();
+        //pw.println("WifiWatchdogStateMachine dump");
+        //mWifiWatchdogStateMachine.dump(pw);
         pw.println("WifiStateMachine dump");
         mWifiStateMachine.dump(fd, pw, args);
     }

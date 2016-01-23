@@ -591,8 +591,9 @@ public class WifiStateMachine extends StateMachine {
         IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
         mNwService = INetworkManagementService.Stub.asInterface(b);
 
-        mP2pSupported = mContext.getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_WIFI_DIRECT);
+        mP2pSupported = false;
+        //mP2pSupported = mContext.getPackageManager().hasSystemFeature(
+        //        PackageManager.FEATURE_WIFI_DIRECT);
 
         mWifiNative = new WifiNative(mInterfaceName);
         mWifiConfigStore = new WifiConfigStore(context, mWifiNative);
@@ -770,14 +771,15 @@ public class WifiStateMachine extends StateMachine {
     public void setWifiEnabled(boolean enable) {
         mLastEnableUid.set(Binder.getCallingUid());
         if (enable) {
-            WifiNative.setMode(0);
+            setWifiState(WIFI_STATE_ENABLED);
+            //WifiNative.setMode(0);
             /* Argument is the state that is entered prior to load */
-            sendMessage(obtainMessage(CMD_LOAD_DRIVER, WIFI_STATE_ENABLING, 0));
-            sendMessage(CMD_START_SUPPLICANT);
+            //sendMessage(obtainMessage(CMD_LOAD_DRIVER, WIFI_STATE_ENABLING, 0));
+            //sendMessage(CMD_START_SUPPLICANT);
         } else {
-            sendMessage(CMD_STOP_SUPPLICANT);
+            //sendMessage(CMD_STOP_SUPPLICANT);
             /* Argument is the state that is entered upon success */
-            sendMessage(obtainMessage(CMD_UNLOAD_DRIVER, WIFI_STATE_DISABLED, 0));
+            //sendMessage(obtainMessage(CMD_UNLOAD_DRIVER, WIFI_STATE_DISABLED, 0));
         }
     }
 
@@ -1687,7 +1689,9 @@ public class WifiStateMachine extends StateMachine {
     private void sendNetworkStateChangeBroadcast(String bssid) {
         checkAndSetConnectivityInstance();
         mNetworkInfo = mCm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        mWifiInfo = new WifiInfo(WifiManager.fake_wifi_info);
+
+        WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        mWifiInfo = new WifiInfo(wm.getConnectionInfo());
 
         Intent intent = new Intent(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
@@ -2099,38 +2103,40 @@ public class WifiStateMachine extends StateMachine {
         @Override
         //TODO: could move logging into a common class
         public void enter() {
-            if (DBG) log(getName() + "\n");
-            // [31-8] Reserved for future use
-            // [7 - 0] HSM state change
-            // 50021 wifi_state_changed (custom|1|5)
-            EventLog.writeEvent(EVENTLOG_WIFI_STATE_CHANGED, getName());
-
-            if (mWifiNative.isDriverLoaded()) {
-                transitionTo(mDriverLoadedState);
-            }
-            else {
-                transitionTo(mDriverUnloadedState);
-            }
-
-            //Connect to WifiP2pService
-            mWifiP2pManager = (WifiP2pManager) mContext.getSystemService(Context.WIFI_P2P_SERVICE);
-            mWifiP2pChannel.connect(mContext, getHandler(), mWifiP2pManager.getMessenger());
-
-            /* IPv6 is disabled at boot time and is controlled by framework
-             * to be enabled only as long as we are connected to an access point
-             *
-             * This fixes issues, a few being:
-             * - IPv6 addresses and routes stick around after disconnection
-             * - When connected, the kernel is unaware and can fail to start IPv6 negotiation
-             * - The kernel sometimes starts autoconfiguration when 802.1x is not complete
-             */
-            try {
-                mNwService.disableIpv6(mInterfaceName);
-            } catch (RemoteException re) {
-                loge("Failed to disable IPv6: " + re);
-            } catch (IllegalStateException e) {
-                loge("Failed to disable IPv6: " + e);
-            }
+            //sfdroid
+            transitionTo(mConnectedState);
+//            if (DBG) log(getName() + "\n");
+//            // [31-8] Reserved for future use
+//            // [7 - 0] HSM state change
+//            // 50021 wifi_state_changed (custom|1|5)
+//            EventLog.writeEvent(EVENTLOG_WIFI_STATE_CHANGED, getName());
+//
+//            if (mWifiNative.isDriverLoaded()) {
+//                transitionTo(mDriverLoadedState);
+//            }
+//            else {
+//                transitionTo(mDriverUnloadedState);
+//            }
+//
+//            //Connect to WifiP2pService
+//            mWifiP2pManager = (WifiP2pManager) mContext.getSystemService(Context.WIFI_P2P_SERVICE);
+//            mWifiP2pChannel.connect(mContext, getHandler(), mWifiP2pManager.getMessenger());
+//
+//            /* IPv6 is disabled at boot time and is controlled by framework
+//             * to be enabled only as long as we are connected to an access point
+//             *
+//             * This fixes issues, a few being:
+//             * - IPv6 addresses and routes stick around after disconnection
+//             * - When connected, the kernel is unaware and can fail to start IPv6 negotiation
+//             * - The kernel sometimes starts autoconfiguration when 802.1x is not complete
+//             */
+//            try {
+//                mNwService.disableIpv6(mInterfaceName);
+//            } catch (RemoteException re) {
+//                loge("Failed to disable IPv6: " + re);
+//            } catch (IllegalStateException e) {
+//                loge("Failed to disable IPv6: " + e);
+//            }
         }
     }
 
@@ -3562,6 +3568,7 @@ public class WifiStateMachine extends StateMachine {
             if (DBG) log(getName() + message.toString() + "\n");
             switch (message.what) {
                case WifiWatchdogStateMachine.POOR_LINK_DETECTED:
+/*
                     if (DBG) log("Watchdog reports poor link");
                     try {
                         mNwService.disableIpv6(mInterfaceName);
@@ -3570,12 +3577,13 @@ public class WifiStateMachine extends StateMachine {
                     } catch (IllegalStateException e) {
                         loge("Failed to disable IPv6: " + e);
                     }
-                    /* Report a disconnect */
+                    // Report a disconnect
                     setNetworkDetailedState(DetailedState.DISCONNECTED);
                     mWifiConfigStore.updateStatus(mLastNetworkId, DetailedState.DISCONNECTED);
                     sendNetworkStateChangeBroadcast(mLastBssid);
 
                     transitionTo(mVerifyingLinkState);
+*/
                     break;
                 default:
                     return NOT_HANDLED;
@@ -3584,9 +3592,9 @@ public class WifiStateMachine extends StateMachine {
         }
         @Override
         public void exit() {
-            /* Request a CS wakelock during transition to mobile */
-            checkAndSetConnectivityInstance();
-            mCm.requestNetworkTransitionWakelock(TAG);
+//            /* Request a CS wakelock during transition to mobile */
+//            checkAndSetConnectivityInstance();
+//            mCm.requestNetworkTransitionWakelock(TAG);
         }
     }
 

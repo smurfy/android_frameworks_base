@@ -217,7 +217,8 @@ public class WifiNative {
     }
 
     public boolean startDriver() {
-        return doBooleanCommand("DRIVER START");
+        return false;
+//        return doBooleanCommand("DRIVER START");
     }
 
     public boolean stopDriver() {

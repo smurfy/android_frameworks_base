@@ -1130,7 +1130,7 @@ public abstract class PackageManager {
      * {@link #hasSystemFeature}: The device supports Wi-Fi Direct networking.
      */
     @SdkConstant(SdkConstantType.FEATURE)
-    public static final String FEATURE_WIFI_DIRECT = "android.hardware.wifi.direct";
+    public static final String FEATURE_WIFI_DIRECT = "android.hardware.wifi.direct_dummy";
 
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
