@@ -666,8 +666,9 @@ public class WifiStateMachine extends StateMachine {
         IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
         mNwService = INetworkManagementService.Stub.asInterface(b);
 
-        mP2pSupported = mContext.getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_WIFI_DIRECT);
+        mP2pSupported = false;
+        //mP2pSupported = mContext.getPackageManager().hasSystemFeature(
+        //        PackageManager.FEATURE_WIFI_DIRECT);
 
         mWifiNative = new WifiNative(mInterfaceName);
         mWifiConfigStore = new WifiConfigStore(context, mWifiNative);
@@ -1251,8 +1252,9 @@ public class WifiStateMachine extends StateMachine {
      */
     public void setSupplicantRunning(boolean enable) {
         if (enable) {
-            WifiNative.setMode(0);
-            sendMessage(CMD_START_SUPPLICANT);
+            //WifiNative.setMode(0);
+            //sendMessage(CMD_START_SUPPLICANT);
+            setWifiState(WIFI_STATE_ENABLED);
         } else {
             sendMessage(CMD_STOP_SUPPLICANT);
         }
@@ -2248,7 +2250,9 @@ public class WifiStateMachine extends StateMachine {
     private void sendNetworkStateChangeBroadcast(String bssid) {
         checkAndSetConnectivityInstance();
         mNetworkInfo = mCm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        mWifiInfo = new WifiInfo(WifiManager.fake_wifi_info);
+
+        WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        mWifiInfo = new WifiInfo(wm.getConnectionInfo());
 
         Intent intent = new Intent(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
@@ -2711,21 +2715,22 @@ public class WifiStateMachine extends StateMachine {
     class InitialState extends State {
         @Override
         public void enter() {
-            mWifiNative.unloadDriver();
-
-            if (mWifiP2pChannel == null) {
-                mWifiP2pChannel = new AsyncChannel();
-                mWifiP2pChannel.connect(mContext, getHandler(), mWifiP2pManager.getMessenger());
-            }
-
-            if (mWifiApConfigChannel == null) {
-                mWifiApConfigChannel = new AsyncChannel();
-                WifiApConfigStore wifiApConfigStore = WifiApConfigStore.makeWifiApConfigStore(
-                        mContext, getHandler());
-                wifiApConfigStore.loadApConfiguration();
-                mWifiApConfigChannel.connectSync(mContext, getHandler(),
-                        wifiApConfigStore.getMessenger());
-            }
+            transitionTo(mConnectedState);
+//            mWifiNative.unloadDriver();
+//
+//            if (mWifiP2pChannel == null) {
+//                mWifiP2pChannel = new AsyncChannel();
+//                mWifiP2pChannel.connect(mContext, getHandler(), mWifiP2pManager.getMessenger());
+//            }
+//
+//            if (mWifiApConfigChannel == null) {
+//                mWifiApConfigChannel = new AsyncChannel();
+//                WifiApConfigStore wifiApConfigStore = WifiApConfigStore.makeWifiApConfigStore(
+//                        mContext, getHandler());
+//                wifiApConfigStore.loadApConfiguration();
+//                mWifiApConfigChannel.connectSync(mContext, getHandler(),
+//                        wifiApConfigStore.getMessenger());
+//            }
         }
         @Override
         public boolean processMessage(Message message) {
@@ -3982,6 +3987,7 @@ public class WifiStateMachine extends StateMachine {
         public boolean processMessage(Message message) {
             switch (message.what) {
                case WifiWatchdogStateMachine.POOR_LINK_DETECTED:
+/*
                     if (DBG) log("Watchdog reports poor link");
                     try {
                         mNwService.disableIpv6(mInterfaceName);
@@ -3990,12 +3996,13 @@ public class WifiStateMachine extends StateMachine {
                     } catch (IllegalStateException e) {
                         loge("Failed to disable IPv6: " + e);
                     }
-                    /* Report a disconnect */
+                    // Report a disconnect
                     setNetworkDetailedState(DetailedState.DISCONNECTED);
                     mWifiConfigStore.updateStatus(mLastNetworkId, DetailedState.DISCONNECTED);
                     sendNetworkStateChangeBroadcast(mLastBssid);
 
                     transitionTo(mVerifyingLinkState);
+*/
                     break;
                 default:
                     return NOT_HANDLED;
@@ -4004,12 +4011,12 @@ public class WifiStateMachine extends StateMachine {
         }
         @Override
         public void exit() {
-            if (Settings.Global.getInt(mContext.getContentResolver(),
-                    Settings.Global.AIRPLANE_MODE_ON, 0) != 1) {
-                /* Request a CS wakelock during transition to mobile */
-                checkAndSetConnectivityInstance();
-                mCm.requestNetworkTransitionWakelock(getName());
-            }
+//            if (Settings.Global.getInt(mContext.getContentResolver(),
+//                    Settings.Global.AIRPLANE_MODE_ON, 0) != 1) {
+//                /* Request a CS wakelock during transition to mobile */
+//                checkAndSetConnectivityInstance();
+//                mCm.requestNetworkTransitionWakelock(getName());
+//            }
         }
     }
 
