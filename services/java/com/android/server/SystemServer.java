@@ -767,6 +767,7 @@ class ServerThread {
             }
 
             if (!disableNonCoreServices) {
+/*
                 try {
                     Slog.i(TAG, "USB Service");
                     // Manage USB host and device support
@@ -775,6 +776,7 @@ class ServerThread {
                 } catch (Throwable e) {
                     reportWtf("starting UsbService", e);
                 }
+*/
 
                 try {
                     Slog.i(TAG, "Serial Service");

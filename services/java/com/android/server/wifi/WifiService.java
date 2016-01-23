@@ -272,7 +272,7 @@ public final class WifiService extends IWifiManager.Stub {
     }
     WifiStateMachineHandler mWifiStateMachineHandler;
 
-    private WifiWatchdogStateMachine mWifiWatchdogStateMachine;
+//    private WifiWatchdogStateMachine mWifiWatchdogStateMachine;
 
     public WifiService(Context context) {
         mContext = context;
@@ -330,13 +330,15 @@ public final class WifiService extends IWifiManager.Stub {
         Slog.i(TAG, "WifiService starting up with Wi-Fi " +
                 (wifiEnabled ? "enabled" : "disabled"));
 
+        setWifiEnabled(mContext.getBasePackageName(), true);
+/*
         // If we are already disabled (could be due to airplane mode), avoid changing persist
         // state here
         if (wifiEnabled) setWifiEnabled(mContext.getBasePackageName(), wifiEnabled);
 
         mWifiWatchdogStateMachine = WifiWatchdogStateMachine.
                makeWifiWatchdogStateMachine(mContext);
-
+*/
     }
 
     /**
@@ -1272,8 +1274,8 @@ public final class WifiService extends IWifiManager.Stub {
         pw.println("Locks held:");
         mLocks.dump(pw);
 
-        mWifiWatchdogStateMachine.dump(fd, pw, args);
-        pw.println();
+//        mWifiWatchdogStateMachine.dump(fd, pw, args);
+//        pw.println();
         mWifiStateMachine.dump(fd, pw, args);
         pw.println();
     }
