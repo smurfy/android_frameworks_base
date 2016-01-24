@@ -702,6 +702,8 @@ public class WifiStateMachine extends StateMachine {
 
         addState(mDefaultState);
             addState(mInitialState, mDefaultState);
+                addState(mConnectedState, mInitialState);
+/*
             addState(mDriverUnloadingState, mDefaultState);
             addState(mDriverUnloadedState, mDefaultState);
                 addState(mDriverFailedState, mDriverUnloadedState);
@@ -730,6 +732,7 @@ public class WifiStateMachine extends StateMachine {
                 addState(mTetheringState, mSoftApStartedState);
                 addState(mTetheredState, mSoftApStartedState);
             addState(mSoftApStoppingState, mDefaultState);
+*/
 
         setInitialState(mInitialState);
 
