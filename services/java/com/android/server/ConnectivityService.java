@@ -580,8 +580,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             switch (config.radio) {
                 case TYPE_WIFI:
                     return new WifiStateTracker(targetNetworkType, config.name);
-                case TYPE_MOBILE:
-                    return new MobileDataStateTracker(targetNetworkType, config.name);
+//                case TYPE_MOBILE:
+//                    return new MobileDataStateTracker(targetNetworkType, config.name);
                 case TYPE_DUMMY:
                     return new DummyDataStateTracker(targetNetworkType, config.name);
                 case TYPE_BLUETOOTH:
