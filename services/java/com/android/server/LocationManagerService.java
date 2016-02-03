@@ -1071,7 +1071,8 @@ public class LocationManagerService extends ILocationManager.Stub {
      */
     @Override
     public List<String> getAllProviders() {
-        ArrayList<String> out;
+        ArrayList<String> out = new ArrayList<String>(0);
+/*
         synchronized (mLock) {
             out = new ArrayList<String>(mProviders.size());
             for (LocationProviderInterface provider : mProviders) {
@@ -1082,7 +1083,7 @@ public class LocationManagerService extends ILocationManager.Stub {
                 out.add(name);
             }
         }
-
+*/
         if (D) Log.d(TAG, "getAllProviders()=" + out);
         return out;
     }
@@ -1094,8 +1095,9 @@ public class LocationManagerService extends ILocationManager.Stub {
      */
     @Override
     public List<String> getProviders(Criteria criteria, boolean enabledOnly) {
-        int allowedResolutionLevel = getCallerAllowedResolutionLevel();
-        ArrayList<String> out;
+//        int allowedResolutionLevel = getCallerAllowedResolutionLevel();
+        ArrayList<String> out = new ArrayList<String>(0);
+/*
         int uid = Binder.getCallingUid();;
         long identity = Binder.clearCallingIdentity();
         try {
@@ -1121,7 +1123,7 @@ public class LocationManagerService extends ILocationManager.Stub {
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
-
+*/
         if (D) Log.d(TAG, "getProviders()=" + out);
         return out;
     }
@@ -1838,6 +1840,8 @@ public class LocationManagerService extends ILocationManager.Stub {
 
     @Override
     public boolean isProviderEnabled(String provider) {
+        return false;
+/*
         // TODO: remove this check in next release, see b/10696351
         checkResolutionLevelIsSufficientForProviderUse(getCallerAllowedResolutionLevel(),
                 provider);
@@ -1858,6 +1862,7 @@ public class LocationManagerService extends ILocationManager.Stub {
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
+*/
     }
 
     /**

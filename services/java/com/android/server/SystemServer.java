@@ -236,7 +236,7 @@ class ServerThread {
         boolean disableMedia = SystemProperties.getBoolean("config.disable_media", false);
         boolean disableBluetooth = SystemProperties.getBoolean("config.disable_bluetooth", false);
         boolean disableTelephony = SystemProperties.getBoolean("config.disable_telephony", false);
-        boolean disableLocation = true;/*SystemProperties.getBoolean("config.disable_location", false);*/
+        boolean disableLocation = SystemProperties.getBoolean("config.disable_location", false);
         boolean disableSystemUI = SystemProperties.getBoolean("config.disable_systemui", false);
         boolean disableNonCoreServices = SystemProperties.getBoolean("config.disable_noncore", false);
         boolean disableNetwork = SystemProperties.getBoolean("config.disable_network", false);
