@@ -200,6 +200,8 @@ final class ElectronBeam {
      * @return True if successful.
      */
     public boolean draw(float level) {
+        return true;
+/*
         if (DEBUG) {
             Slog.d(TAG, "drawFrame: level=" + level);
         }
@@ -235,6 +237,7 @@ final class ElectronBeam {
             detachEglContext();
         }
         return showSurface(1.0f);
+*/
     }
 
     /**
