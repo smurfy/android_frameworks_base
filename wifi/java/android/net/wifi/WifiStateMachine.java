@@ -3619,8 +3619,8 @@ public class WifiStateMachine extends StateMachine {
                             setNetworkDetailedState(DetailedState.CONNECTED);
                             if(changed)
                             {
-                                setWifiState(WIFI_STATE_ENABLED);
                                 mNetworkInfo.setIsAvailable(true);
+                                setWifiState(WIFI_STATE_ENABLED);
                             }
                         }
                         else
@@ -3628,8 +3628,8 @@ public class WifiStateMachine extends StateMachine {
                             setNetworkDetailedState(DetailedState.DISCONNECTED);
                             if(changed)
                             {
-                                setWifiState(WIFI_STATE_DISABLED);
                                 mNetworkInfo.setIsAvailable(false);
+                                setWifiState(WIFI_STATE_DISABLED);
                             }
                         }
                     }
