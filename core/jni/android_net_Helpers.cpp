@@ -36,7 +36,7 @@ void set_string_value2(JNIEnv *env, char *name, char *name2, char *value)
     static unsigned char saved_ip[4];
     static char saved_interface[128];
 
-    ALOGW("name: %s:%s: val %s\n", name, name2, value);
+    //ALOGW("name: %s:%s: val %s\n", name, name2, value);
     if(strcmp(name, "Ethernet") == 0)
     {
         if(strcmp(name2, "Address") == 0)
@@ -148,7 +148,7 @@ void set_string_value(JNIEnv *env, char *name, char *value)
     jfieldID flink_properties = env->GetStaticFieldID(Helpers, "link_properties", "Landroid/net/LinkProperties;");
     jobject link_properties = env->GetStaticObjectField(Helpers, flink_properties);
 
-    ALOGW("name: %s val: %s\n", name, value);
+    //ALOGW("name: %s val: %s\n", name, value);
     if(strcmp(name, "Name") == 0)
     {
         jclass WifiSsid;
@@ -181,7 +181,7 @@ void set_bool_value(JNIEnv *env, char *name, bool value)
     jfieldID flink_properties = env->GetStaticFieldID(Helpers, "link_properties", "Landroid/net/LinkProperties;");
     jobject link_properties = env->GetStaticObjectField(Helpers, flink_properties);
 
-    ALOGW("name: %s val: %s\n", name, value ? "true": "false");
+    //ALOGW("name: %s val: %s\n", name, value ? "true": "false");
 }
 
 void set_byte_value(JNIEnv *env, char *name, char value)
@@ -194,7 +194,7 @@ void set_byte_value(JNIEnv *env, char *name, char value)
     jfieldID flink_properties = env->GetStaticFieldID(Helpers, "link_properties", "Landroid/net/LinkProperties;");
     jobject link_properties = env->GetStaticObjectField(Helpers, flink_properties);
 
-    ALOGW("name: %s val: %d\n", name, value);
+    //ALOGW("name: %s val: %d\n", name, value);
     if(strcmp(name, "Strength") == 0)
     {
         jclass clazz;
@@ -214,7 +214,7 @@ void set_uint16_value2(JNIEnv *env, char *name, char *name2, uint16_t value)
     jfieldID flink_properties = env->GetStaticFieldID(Helpers, "link_properties", "Landroid/net/LinkProperties;");
     jobject link_properties = env->GetStaticObjectField(Helpers, flink_properties);
 
-    ALOGW("name: %s:%s val: %d\n", name, name2, value);
+    //ALOGW("name: %s:%s val: %d\n", name, name2, value);
     if(strcmp(name, "Ethernet") == 0)
     {
 #if 0
@@ -237,7 +237,7 @@ void set_string_value_array(JNIEnv *env, char *name, int index, char *value)
     jobject network_info = env->GetStaticObjectField(Helpers, fnetwork_info);
     jfieldID flink_properties = env->GetStaticFieldID(Helpers, "link_properties", "Landroid/net/LinkProperties;");
     jobject link_properties = env->GetStaticObjectField(Helpers, flink_properties);
-    ALOGW("name: %s val[%d]: %s\n", name, index, value);
+    //ALOGW("name: %s val[%d]: %s\n", name, index, value);
 
 
     if(strcmp(name, "Nameservers") == 0)
@@ -456,7 +456,7 @@ static jint sfdroid_dbus_Helpers_getWifiInfo(JNIEnv *env)
 
     if(!dbus_message_iter_init(msg, &args))
     {
-        ALOGW("message has no arguments\n");
+        //ALOGW("message has no arguments\n");
         err = 1;
         goto quit;
     }
@@ -483,7 +483,7 @@ static jint sfdroid_dbus_Helpers_getWifiInfo(JNIEnv *env)
                     {
                         char *val;
                         dbus_message_iter_get_basic(&struc, &val);
-                        //ALOGW("object path: %s\n", val);
+                        ////ALOGW("object path: %s\n", val);
                         cell = wifi = 0;
                         if(strstr(val, "cell") != NULL)
                         {
