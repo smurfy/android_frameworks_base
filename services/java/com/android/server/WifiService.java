@@ -441,6 +441,11 @@ public class WifiService extends IWifiManager.Stub {
         mNotificationEnabledSettingObserver.register();
     }
 
+    public void update_wifiinfo()
+    {
+        mWifiStateMachine.update_wifiinfo();
+    }
+
     /** Tell battery stats about a new WIFI scan */
     private void noteScanStart() {
         WorkSource scanWorkSource = null;

@@ -412,18 +412,6 @@ public class ConnectivityManager {
         }
     }
 
-    NetworkInfo fake_networkinfo = null;
-
-    public void setup_fake_networkinfo()
-    {
-        if(fake_networkinfo == null)
-        {
-            fake_networkinfo = new NetworkInfo(ConnectivityManager.TYPE_WIFI, 0, "WIFI", "");
-            fake_networkinfo.setDetailedState(NetworkInfo.DetailedState.CONNECTED, "sfdroid", "fake wifi");
-            fake_networkinfo.setIsAvailable(true);
-        }
-    }
-
     /**
      * Returns details about the currently active data network. When connected,
      * this network is the default route for outgoing connections. You should
@@ -433,33 +421,23 @@ public class ConnectivityManager {
      * {@link android.Manifest.permission#ACCESS_NETWORK_STATE}.
      */
     public NetworkInfo getActiveNetworkInfo() {
-        setup_fake_networkinfo();
-        return new NetworkInfo(fake_networkinfo);
-/*
         try {
             return mService.getActiveNetworkInfo();
         } catch (RemoteException e) {
             return null;
         }
-*/
     }
 
     /** {@hide} */
     public NetworkInfo getActiveNetworkInfoForUid(int uid) {
-        setup_fake_networkinfo();
-        return new NetworkInfo(fake_networkinfo);
-/*
         try {
             return mService.getActiveNetworkInfoForUid(uid);
         } catch (RemoteException e) {
             return null;
         }
-*/
     }
 
     public NetworkInfo getNetworkInfo(int networkType) {
-        setup_fake_networkinfo();
-        if(networkType == TYPE_WIFI) return new NetworkInfo(fake_networkinfo);
         try {
             return mService.getNetworkInfo(networkType);
         } catch (RemoteException e) {
@@ -468,16 +446,11 @@ public class ConnectivityManager {
     }
 
     public NetworkInfo[] getAllNetworkInfo() {
-        NetworkInfo[] networkinfos = new NetworkInfo[1];
-        networkinfos[0] = new NetworkInfo(fake_networkinfo);
-        return networkinfos;
-/*
         try {
             return mService.getAllNetworkInfo();
         } catch (RemoteException e) {
             return null;
         }
-*/
     }
 
     /** {@hide} */

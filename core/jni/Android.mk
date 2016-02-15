@@ -149,7 +149,8 @@ LOCAL_SRC_FILES:= \
 	android_app_backup_FullBackup.cpp \
 	android_content_res_ObbScanner.cpp \
 	android_content_res_Configuration.cpp \
-    android_animation_PropertyValuesHolder.cpp
+    android_animation_PropertyValuesHolder.cpp \
+	android_net_Helpers.cpp
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     LOCAL_CFLAGS += -DQCOM_HARDWARE
@@ -185,7 +186,8 @@ LOCAL_C_INCLUDES += \
 	external/harfbuzz/src \
 	external/zlib \
 	frameworks/opt/emoji \
-	libcore/include
+	libcore/include \
+	external/dbus
 
 LOCAL_SHARED_LIBRARIES := \
 	libandroidfw \
@@ -219,7 +221,8 @@ LOCAL_SHARED_LIBRARIES := \
 	libjpeg \
 	libusbhost \
 	libharfbuzz \
-	libz
+	libz \
+	libdbus
 
 ifeq ($(HAVE_SELINUX),true)
 LOCAL_C_INCLUDES += external/libselinux/include

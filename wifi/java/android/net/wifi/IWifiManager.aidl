@@ -115,5 +115,7 @@ interface IWifiManager
     String getConfigFile();
 
     void captivePortalCheckComplete();
+
+    void update_wifiinfo();
 }
 
