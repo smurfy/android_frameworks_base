@@ -168,6 +168,8 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
+import android.net.wifi.WifiManager;
+
 /**
  * @hide
  */
@@ -831,6 +833,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         return wimaxStateTracker;
     }
 
+    void update_wifiinfo()
+    {
+        WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        wifi.update_wifiinfo();
+    }
+
     /**
      * Sets the preferred network.
      * @param preference the new preference
@@ -949,6 +957,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      * {@link #isNetworkBlocked(NetworkStateTracker, int)}.
      */
     private NetworkInfo getFilteredNetworkInfo(NetworkStateTracker tracker, int uid) {
+        update_wifiinfo();
         NetworkInfo info = tracker.getNetworkInfo();
         if (isNetworkBlocked(tracker, uid)) {
             // network is blocked; clone and override state
@@ -1016,9 +1025,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     public NetworkInfo getActiveNetworkInfoUnfiltered() {
         enforceAccessPermission();
+        update_wifiinfo();
         if (isNetworkTypeValid(mActiveDefaultNetwork)) {
             final NetworkStateTracker tracker = mNetTrackers[mActiveDefaultNetwork];
             if (tracker != null) {
+                
                 return tracker.getNetworkInfo();
             }
         }
@@ -1086,6 +1097,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     @Override
     public LinkProperties getLinkProperties(int networkType) {
         enforceAccessPermission();
+        update_wifiinfo();
         if (isNetworkTypeValid(networkType)) {
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {

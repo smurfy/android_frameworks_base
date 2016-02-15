@@ -42,12 +42,6 @@ import com.android.internal.util.Protocol;
 
 import java.util.List;
 
-// FakeWifiConnection
-import java.util.Collections;
-import java.util.regex.Pattern;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-
 /**
  * This class provides the primary API for managing all aspects of Wi-Fi
  * connectivity. Get an instance of this class by calling
@@ -876,111 +870,6 @@ public class WifiManager {
 */
     }
 
-    // FakeWifiConnection
-    public static boolean isIPv4Address(String input)
-    {
-        Pattern IPV4_PATTERN = Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
-        return IPV4_PATTERN.matcher(input).matches();
-    }
-
-    public static int netmask_to_hex(int netmask_slash)
-    {
-        int r = 0;
-        int b = 1;
-        for (int i = 0; i < netmask_slash;  i++, b = b << 1)
-        r |= b;
-        return r;
-    }
-
-    // for DhcpInfo
-    private static int InetAddress_to_hex(InetAddress a)
-    {
-        int result = 0;
-        byte b[] = a.getAddress();
-        for (int i = 0; i < 4; i++)
-        result |= (b[i] & 0xff) << (8 * i);
-        return result;
-    }
-
-    public DhcpInfo createDhcpInfo()
-    {
-        DhcpInfo i = new DhcpInfo();
-        IPInfo ip = getIPInfo();
-        i.ipAddress = ip.ip_hex;
-        i.netmask = ip.netmask_hex;
-        i.dns1 = 0x04040404;
-        i.dns2 = 0x08080808;
-        // gateway, leaseDuration, serverAddress
-
-        return i;
-    }
-    static class IPInfo
-    {
-        NetworkInterface intf;
-        InetAddress addr;
-        String ip;
-        int ip_hex;
-        int netmask_hex;
-    }
-
-    // get current ip and netmask
-    public static IPInfo getIPInfo()
-    {
-      try
-        {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces)
-            {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs)
-                {
-                    if (!addr.isLoopbackAddress())
-                    {
-                        String sAddr = addr.getHostAddress().toUpperCase();
-                        boolean isIPv4 = isIPv4Address(sAddr);
-                        if (isIPv4)
-                        {
-                            IPInfo info = new IPInfo();
-                            info.addr = addr;
-                            info.intf = intf;
-                            info.ip = sAddr;
-                            info.ip_hex = InetAddress_to_hex(addr);
-                            info.netmask_hex = netmask_to_hex(intf.getInterfaceAddresses().get(0).getNetworkPrefixLength());
-                            return info;
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) { } // for now eat exceptions
-        return null;
-    }
-
-    public static WifiInfo fake_wifi_info = null;
-
-    void setup_fake_wifi_info()
-    {
-        if(fake_wifi_info == null)
-        {
-            fake_wifi_info = new WifiInfo();
-
-            IPInfo ip = getIPInfo();
-            InetAddress addr = (ip != null ? ip.addr : null);
-
-            fake_wifi_info.setNetworkId(1);
-            fake_wifi_info.setSupplicantState(SupplicantState.COMPLETED);
-            // Hmm
-            fake_wifi_info.setBSSID("66:55:44:33:22:11");
-            fake_wifi_info.setMacAddress("11:22:33:44:55:66");
-
-            fake_wifi_info.setInetAddress(addr);
-            fake_wifi_info.setLinkSpeed(65);
-            //fake_wifi_info.setFrequency(5000);
-            fake_wifi_info.setRssi(200);
-
-            fake_wifi_info.setSSID(WifiSsid.createFromAsciiEncoded("sfdroid-FakeWifi"));
-        }
-    }
-
     /**
      * Force a re-reading of batched scan results.  This will attempt
      * to read more information from the chip, but will do so at the expense
@@ -1007,20 +896,25 @@ public class WifiManager {
         } catch (RemoteException e) { }
     }
 
+    public void update_wifiinfo()
+    {
+        try {
+            mService.update_wifiinfo();
+        } catch (RemoteException e) {
+        }
+    }
+
     /**
      * Return dynamic information about the current Wi-Fi connection, if any is active.
      * @return the Wi-Fi information, contained in {@link WifiInfo}.
      */
     public WifiInfo getConnectionInfo() {
-        setup_fake_wifi_info();
-        return new WifiInfo(fake_wifi_info);
-/*
+        update_wifiinfo();
         try {
             return mService.getConnectionInfo();
         } catch (RemoteException e) {
             return null;
         }
-*/
     }
 
     /**
@@ -1173,14 +1067,12 @@ public class WifiManager {
      * @return the DHCP information
      */
     public DhcpInfo getDhcpInfo() {
-        return createDhcpInfo();
-/*
+        update_wifiinfo();
         try {
             return mService.getDhcpInfo();
         } catch (RemoteException e) {
             return null;
         }
-*/
     }
 
     /**

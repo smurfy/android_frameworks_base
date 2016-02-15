@@ -97,6 +97,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
+import android.net.Helpers;
+
 /**
  * Track the state of Wifi connectivity. All event handling is done here,
  * and all changes in connectivity state are initiated here.
@@ -443,6 +445,10 @@ public class WifiStateMachine extends StateMachine {
 
     /* Get supported channels */
     public static final int CMD_GET_SUPPORTED_CHANNELS    = BASE + 144;
+
+
+    /* update wifi info via dbus */
+    public static final int CMD_WIFI_UPDATE               = BASE + 145;
 
     /* Wifi state machine modes of operation */
     /* CONNECT_MODE - connect to any 'known' AP when it becomes available */
@@ -839,6 +845,31 @@ public class WifiStateMachine extends StateMachine {
     /*********************************************************
      * Methods exposed for public use
      ********************************************************/
+
+    private Boolean wifi_updated = false;
+    private final Object wifi_update_lock = new Object();
+    private long wifi_update_time = 0; 
+
+    public void update_wifiinfo()
+    {
+        long now = SystemClock.elapsedRealtime();
+        if(now - wifi_update_time < 1000)
+        {
+            loge("wifi info recent enough");
+            return;
+        }
+        wifi_update_time = now;
+        try {
+            synchronized(wifi_update_lock)
+            {
+                sendMessage(CMD_WIFI_UPDATE);
+                wifi_update_lock.wait();
+            }
+        } catch (InterruptedException ex) {
+            loge("InterruptedException in update_wifiinfo" + ex);
+            Thread.currentThread().interrupt();
+        }
+    }
 
     public Messenger getMessenger() {
         return new Messenger(getHandler());
@@ -1888,8 +1919,7 @@ public class WifiStateMachine extends StateMachine {
         intent.putExtra(WifiManager.EXTRA_PREVIOUS_WIFI_STATE, previousWifiState);
         mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
 
-        // sfdroid
-        sendNetworkStateChangeBroadcast(null);
+        sendNetworkStateChangeBroadcast(mWifiInfo.getBSSID());
     }
 
     private void setWifiApState(int wifiApState) {
@@ -2250,10 +2280,6 @@ public class WifiStateMachine extends StateMachine {
 
     private void sendNetworkStateChangeBroadcast(String bssid) {
         checkAndSetConnectivityInstance();
-        mNetworkInfo = mCm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        WifiManager wm = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-        mWifiInfo = new WifiInfo(wm.getConnectionInfo());
 
         Intent intent = new Intent(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
@@ -3977,6 +4003,45 @@ public class WifiStateMachine extends StateMachine {
         @Override
         public boolean processMessage(Message message) {
             switch (message.what) {
+                case CMD_WIFI_UPDATE:
+                    synchronized(wifi_update_lock)
+                    {
+                        Helpers.network_info = new NetworkInfo(ConnectivityManager.TYPE_WIFI, 0, NETWORKTYPE, "");
+                        Helpers.wifi_info = new WifiInfo();
+                        Helpers.link_properties = new LinkProperties();
+                        boolean changed = false;
+                        if(Helpers.getWifiInfo() == 0)
+                        {
+                            if(!mWifiInfo.getSSID().equals(Helpers.wifi_info.getSSID()))
+                            {
+                                changed = true;
+                            }
+                            mNetworkInfo = Helpers.network_info;
+                            mWifiInfo = Helpers.wifi_info;
+                            mLinkProperties = Helpers.link_properties;
+                        }
+                        wifi_update_lock.notifyAll();
+
+                        if(mWifiInfo.getSSID() != null)
+                        {
+                            setNetworkDetailedState(DetailedState.CONNECTED);
+                            if(changed)
+                            {
+                                setWifiState(WIFI_STATE_ENABLED);
+                                mNetworkInfo.setIsAvailable(true);
+                            }
+                        }
+                        else
+                        {
+                            setNetworkDetailedState(DetailedState.DISCONNECTED);
+                            if(changed)
+                            {
+                                setWifiState(WIFI_STATE_DISABLED);
+                                mNetworkInfo.setIsAvailable(false);
+                            }
+                        }
+                    }
+                    break;
                case WifiWatchdogStateMachine.POOR_LINK_DETECTED:
 /*
                     if (DBG) log("Watchdog reports poor link");
