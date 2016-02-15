@@ -133,5 +133,7 @@ interface IWifiManager
     boolean isBatchedScanSupported();
 
     void pollBatchedScan();
+
+    void update_wifiinfo();
 }
 

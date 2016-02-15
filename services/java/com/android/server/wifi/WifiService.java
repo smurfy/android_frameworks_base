@@ -812,6 +812,11 @@ public final class WifiService extends IWifiManager.Stub {
         }
     }
 
+    public void update_wifiinfo()
+    {
+        mWifiStateMachine.update_wifiinfo();
+    }
+
     /**
      * See {@link android.net.wifi.WifiManager#getConnectionInfo()}
      * @return the Wi-Fi information, contained in {@link WifiInfo}.

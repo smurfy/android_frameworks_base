@@ -151,7 +151,8 @@ LOCAL_SRC_FILES:= \
 	android_content_res_ObbScanner.cpp \
 	android_content_res_Configuration.cpp \
 	android_animation_PropertyValuesHolder.cpp \
-	com_android_internal_net_NetworkStatsFactory.cpp
+	com_android_internal_net_NetworkStatsFactory.cpp \
+	android_net_Helpers.cpp
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
@@ -179,7 +180,9 @@ LOCAL_C_INCLUDES += \
 	external/harfbuzz_ng/src \
 	external/zlib \
 	frameworks/opt/emoji \
-	libcore/include
+	libcore/include \
+    external/dbus
+ 
 
 LOCAL_SHARED_LIBRARIES := \
 	libmemtrack \
@@ -216,7 +219,8 @@ LOCAL_SHARED_LIBRARIES := \
 	libjpeg \
 	libusbhost \
 	libharfbuzz_ng \
-	libz
+	libz \
+	libdbus
 
 ifeq ($(BOARD_USES_QC_TIME_SERVICES),true)
 LOCAL_CFLAGS += -DHAVE_QC_TIME_SERVICES=1
