@@ -72,6 +72,7 @@ void set_string_value2(JNIEnv *env, char *name, char *name2, char *value)
             env->DeleteLocalRef(array);
             jfieldID fmIpAddress = env->GetFieldID(WifiInfo, "mIpAddress", "Ljava/net/InetAddress;");
             env->SetObjectField(wifi_info, fmIpAddress, inet_address);
+            env->DeleteLocalRef(inet_address);
 
             memcpy(saved_ip, address, sizeof(unsigned char) * 4);
         }
@@ -133,9 +134,14 @@ void set_string_value2(JNIEnv *env, char *name, char *name2, char *value)
             jmethodID addRoute = env->GetMethodID(LinkProperties, "addRoute", "(Landroid/net/RouteInfo;)V");
             env->CallObjectMethod(link_properties, addRoute, route_info);
 
+            env->DeleteLocalRef(inet_address);
             env->DeleteLocalRef(route_info);
         }
     }
+
+    env->DeleteLocalRef(wifi_info);
+    env->DeleteLocalRef(network_info);
+    env->DeleteLocalRef(link_properties);
 }
 
 void set_string_value(JNIEnv *env, char *name, char *value)
@@ -160,6 +166,7 @@ void set_string_value(JNIEnv *env, char *name, char *value)
         jclass WifiInfo = env->FindClass("android/net/wifi/WifiInfo");
         jfieldID fmWifiSsid = env->GetFieldID(WifiInfo, "mWifiSsid", "Landroid/net/wifi/WifiSsid;");
         env->SetObjectField(wifi_info, fmWifiSsid, wifissid);
+        env->DeleteLocalRef(wifissid);
     }
     else if(strcmp(name, "BSSID") == 0)
     {
@@ -169,6 +176,10 @@ void set_string_value(JNIEnv *env, char *name, char *value)
         env->SetObjectField(wifi_info, fmBSSID, arg);
         env->DeleteLocalRef(arg);
     }
+
+    env->DeleteLocalRef(wifi_info);
+    env->DeleteLocalRef(network_info);
+    env->DeleteLocalRef(link_properties);
 }
 
 void set_bool_value(JNIEnv *env, char *name, bool value)
@@ -182,6 +193,10 @@ void set_bool_value(JNIEnv *env, char *name, bool value)
     jobject link_properties = env->GetStaticObjectField(Helpers, flink_properties);
 
     //ALOGW("name: %s val: %s\n", name, value ? "true": "false");
+
+    env->DeleteLocalRef(wifi_info);
+    env->DeleteLocalRef(network_info);
+    env->DeleteLocalRef(link_properties);
 }
 
 void set_byte_value(JNIEnv *env, char *name, char value)
@@ -202,6 +217,10 @@ void set_byte_value(JNIEnv *env, char *name, char value)
         jfieldID fmrssi = env->GetFieldID(clazz, "mRssi", "I");
         env->SetIntField(wifi_info, fmrssi, value);
     }
+
+    env->DeleteLocalRef(wifi_info);
+    env->DeleteLocalRef(network_info);
+    env->DeleteLocalRef(link_properties);
 }
 
 void set_uint16_value2(JNIEnv *env, char *name, char *name2, uint16_t value)
@@ -226,6 +245,10 @@ void set_uint16_value2(JNIEnv *env, char *name, char *name2, uint16_t value)
         }
 #endif
     }
+
+    env->DeleteLocalRef(wifi_info);
+    env->DeleteLocalRef(network_info);
+    env->DeleteLocalRef(link_properties);
 }
 
 void set_string_value_array(JNIEnv *env, char *name, int index, char *value)
@@ -255,7 +278,13 @@ void set_string_value_array(JNIEnv *env, char *name, int index, char *value)
         jmethodID addDns = env->GetMethodID(LinkProperties, "addDns", "(Ljava/net/InetAddress;)V");
 
         env->CallVoidMethod(link_properties, addDns, inet_address);
+
+        env->DeleteLocalRef(inet_address);
     }
+
+    env->DeleteLocalRef(wifi_info);
+    env->DeleteLocalRef(network_info);
+    env->DeleteLocalRef(link_properties);
 }
 
 int get_values(JNIEnv *env, DBusMessageIter *struc)
