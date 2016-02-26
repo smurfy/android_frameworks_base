@@ -300,14 +300,14 @@ public class WifiStateTracker extends BaseNetworkStateTracker {
                 // don't want to send redundant state messages
                 // but send portal check detailed state notice
                 NetworkInfo.State state = mNetworkInfo.getState();
-                if (mLastState == state &&
-                        mNetworkInfo.getDetailedState() != DetailedState.CAPTIVE_PORTAL_CHECK) {
-                    return;
-                } else {
+//                if (mLastState == state &&
+//                        mNetworkInfo.getDetailedState() != DetailedState.CAPTIVE_PORTAL_CHECK) {
+//                    return;
+//                } else {
                     mLastState = state;
-                    /* lets not sample traffic data across state changes */
-                    mSamplingDataTracker.resetSamplingData();
-                }
+//                    /* lets not sample traffic data across state changes */
+//                    mSamplingDataTracker.resetSamplingData();
+//                }
 
                 Message msg = mCsHandler.obtainMessage(EVENT_STATE_CHANGED,
                         new NetworkInfo(mNetworkInfo));
