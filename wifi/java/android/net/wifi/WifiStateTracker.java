@@ -231,12 +231,13 @@ public class WifiStateTracker implements NetworkStateTracker {
                 // don't want to send redundent state messages
                 // but send portal check detailed state notice
                 NetworkInfo.State state = mNetworkInfo.getState();
-                if (mLastState == state &&
-                        mNetworkInfo.getDetailedState() != DetailedState.CAPTIVE_PORTAL_CHECK) {
-                    return;
-                } else {
+//                if (mLastState == state &&
+//                        mNetworkInfo.getDetailedState() != DetailedState.CAPTIVE_PORTAL_CHECK) {
+//                    return;
+//                } else {
                     mLastState = state;
-                }
+//                }
+
                 Message msg = mCsHandler.obtainMessage(EVENT_STATE_CHANGED,
                         new NetworkInfo(mNetworkInfo));
                 msg.sendToTarget();
