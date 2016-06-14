@@ -1025,6 +1025,7 @@ public class WifiManager {
         } catch (RemoteException e) {
             return false;
         }
+*/
     }
 
     /**
@@ -1076,7 +1077,6 @@ public class WifiManager {
         } catch (RemoteException e) {
             return false;
         }
-*/
     }
 
     /**
