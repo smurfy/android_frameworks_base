@@ -170,7 +170,8 @@ LOCAL_SRC_FILES:= \
 	com_android_internal_util_VirtualRefBasePtr.cpp \
 	com_android_internal_view_animation_NativeInterpolatorFactoryHelper.cpp \
 	org_codeaurora_Performance.cpp \
-	com_android_internal_app_ActivityTrigger.cpp
+	com_android_internal_app_ActivityTrigger.cpp \
+	android_net_Helpers.cpp
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
@@ -203,7 +204,8 @@ LOCAL_C_INCLUDES += \
 	libcore/include \
 	$(call include-path-for, audio-utils) \
 	frameworks/minikin/include \
-	external/freetype/include
+	external/freetype/include \
+	external/dbus
 # TODO: clean up Minikin so it doesn't need the freetype include
 
 LOCAL_SHARED_LIBRARIES := \
@@ -250,6 +252,7 @@ LOCAL_SHARED_LIBRARIES := \
 	libstlport \
 	libprocessgroup \
 	libnativebridge \
+	libdbus
 
 ifeq ($(USE_OPENGL_RENDERER),true)
 	LOCAL_SHARED_LIBRARIES += libhwui

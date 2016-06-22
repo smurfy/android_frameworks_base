@@ -192,6 +192,7 @@ extern int register_com_android_internal_os_Zygote(JNIEnv *env);
 extern int register_com_android_internal_util_VirtualRefBasePtr(JNIEnv *env);
 extern int register_org_codeaurora_Performance(JNIEnv *env);
 extern int register_com_android_internal_app_ActivityTrigger(JNIEnv *env);
+extern int register_sfdroid_dbus_Helpers(JNIEnv* env);
 
 static AndroidRuntime* gCurRuntime = NULL;
 
@@ -1392,6 +1393,7 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_com_android_internal_net_NetworkStatsFactory),
     REG_JNI(register_org_codeaurora_Performance),
     REG_JNI(register_com_android_internal_app_ActivityTrigger),
+    REG_JNI(register_sfdroid_dbus_Helpers),
 };
 
 /*
